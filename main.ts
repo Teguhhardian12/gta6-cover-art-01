@@ -11,7 +11,7 @@
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
-import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDossier } from './vendor/makefun-app.ts';
@@ -38,3 +38,14 @@ writeFileSync(
     app_path_max_bytes: 1000,
   }),
 );
+
+// Build summary: a quick tally of what was handed in, written beside the dossier.
+const appFiles = readdirSync(join(out, 'app'), { recursive: true, withFileTypes: true }).filter((d) => d.isFile());
+const info = {
+  app: 'cover-studio',
+  files: appFiles.length,
+  bytes: appFiles.reduce((n, f) => n + statSync(join(f.parentPath, f.name)).size, 0),
+  screenshots: readdirSync(join(out, 'screenshots')).filter((f) => /\.(png|jpe?g)$/i.test(f)).length,
+};
+writeFileSync(join(out, 'build-info.json'), JSON.stringify(info, null, 2) + '\n');
+console.log(`build-info: ${info.files} app files, ${info.bytes} bytes, ${info.screenshots} screenshots`);

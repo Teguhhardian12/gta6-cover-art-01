@@ -3,20 +3,98 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cover Snap</title>
+<title>Cover Studio — GTA-style cover maker</title>
 <link rel="stylesheet" href="./style.css">
 </head>
 <body>
 <main class="app">
   <section class="controls">
-    <h1>Cover Snap</h1>
-    <p>A photo and a caption, made into a square cover.</p>
-    <label>Photo <input id="photo" type="file" accept="image/*"></label>
-    <label>Caption <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
-    <button id="export" type="button">Export PNG 1080 x 1080</button>
-    <p id="status" role="status"></p>
+    <header>
+      <h1>Cover Studio</h1>
+      <p>GTA-style multi-panel cover maker. Offline, no uploads.</p>
+    </header>
+
+    <section class="grp">
+      <h2>Photos <span class="hint">1–4</span></h2>
+      <div id="drop">
+        <span>Drop photos here</span>
+        <label class="browse">Browse<input id="photo" type="file" accept="image/*" multiple hidden></label>
+      </div>
+      <div id="thumbs"></div>
+    </section>
+
+    <section class="grp">
+      <h2>Layout</h2>
+      <div class="row">
+        <button type="button" data-layout="2-panel">2-panel</button>
+        <button type="button" data-layout="3-panel">3-panel</button>
+        <button type="button" data-layout="4-panel">4-panel</button>
+      </div>
+    </section>
+
+    <section class="grp">
+      <h2>Grade</h2>
+      <div class="row">
+        <button type="button" data-grade="vice-sunset">Vice Sunset</button>
+        <button type="button" data-grade="neon-night">Neon Night</button>
+        <button type="button" data-grade="miami-pink">Miami Pink</button>
+        <button type="button" data-grade="noir">Noir</button>
+      </div>
+    </section>
+
+    <section class="grp">
+      <h2>Caption</h2>
+      <label class="line">Title <input id="caption" type="text" maxlength="40" value="Sunset Heist"></label>
+      <label class="line">Tagline <input id="tagline" type="text" maxlength="48" value="Vice City Stories" placeholder="Optional"></label>
+      <div class="row">
+        <label class="grow">Size <input id="titleSize" type="range" min="96" max="132" step="1" value="112"></label>
+        <span id="sizeVal" class="val">112px</span>
+      </div>
+      <div class="row">
+        <label class="grow">Case
+          <select id="titleCase">
+            <option value="upper">UPPER</option>
+            <option value="title">Title</option>
+          </select>
+        </label>
+        <label class="line">Colour <input id="titleColor" type="color" value="#ffd166"></label>
+      </div>
+    </section>
+
+    <section class="grp">
+      <h2>Crop</h2>
+      <div class="row">
+        <select id="panelSelect" class="grow" aria-label="Panel"></select>
+        <button type="button" id="resetCrop">Reset crop</button>
+      </div>
+      <div class="row">
+        <label class="grow">Zoom <input id="zoom" type="range" min="1" max="3" step="0.01" value="1"></label>
+        <span id="zoomVal" class="val">1.00x</span>
+      </div>
+      <p class="hint">Drag a panel to pan · wheel to zoom.</p>
+    </section>
+
+    <section class="grp">
+      <h2>Export</h2>
+      <div class="row">
+        <button type="button" id="fmtSquare" class="toggle">Preview square</button>
+        <button type="button" id="fmtPortrait" class="toggle">Preview portrait</button>
+      </div>
+      <div class="row">
+        <button type="button" id="exportSquare" class="primary">PNG 1080×1080</button>
+        <button type="button" id="exportPortrait" class="primary">PNG 1080×1350</button>
+      </div>
+      <div class="row">
+        <button type="button" id="reset">Reset all</button>
+        <span class="hint">Ctrl/Cmd+S exports</span>
+      </div>
+      <p id="status" role="status"></p>
+    </section>
   </section>
-  <canvas id="cover" width="1080" height="1080" aria-label="The cover"></canvas>
+
+  <section class="stage">
+    <canvas id="cover" width="1080" height="1080" aria-label="Cover preview"></canvas>
+  </section>
 </main>
 <script type="module" src="./src/main.js"></script>
 </body>
